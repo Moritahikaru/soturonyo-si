@@ -15,7 +15,29 @@
 \pagestyle{empty}
 \renewcommand{\baselinestretch}{1.2}
 \usepackage{multirow}
-
+\usepackage{titlesec}
+\makeatletter
+\renewenvironment{thebibliography}[1]
+{\section*{\refname\@mkboth{\refname}{\refname}}%
+	\list{\@biblabel{\@arabic\c@enumiv}}%
+	{\settowidth\labelwidth{\@biblabel{#1}}%
+		\leftmargin\labelwidth
+		\advance\leftmargin\labelsep
+		\setlength\itemsep{0zh}%←ここの数値を調整(行間のつまり具合)
+		\setlength\baselineskip{10pt}%←ここの数値を調整（追加）(文字の大きさ)
+		\@openbib@code
+		\usecounter{enumiv}%
+		\let\p@enumiv\@empty
+		\renewcommand\theenumiv{\@arabic\c@enumiv}}%
+	\sloppy
+	\clubpenalty4000
+	\@clubpenalty\clubpenalty
+	\widowpenalty4000%
+	\sfcode`\.\@m}
+{\def\@noitemerr
+	{\@latex@warning{Empty `thebibliography' environment}}%
+	\endlist}
+\makeatother
 \begin{document}
 \twocolumn[
 \begin{center}
@@ -91,9 +113,44 @@ f_0=99.7kHz \nonumber
 \label{tab:nouritu}
 \end{table}
 \subsection{シミュレーション}
-実験をする前に事前にシミュレートしてみた．
-
+実験をする前に事前にシミュレートしてみた．図\ref{fig:simudousa}はそれぞれ電力出力，効率，最適動作判定の結果である．図\ref{fig:simudousa}からわかるとおり入力する周波数が共振周波数近くのとき最適動作周波数が最大だということが分かる．
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.4]{saitekidousasimu.png}
+	\caption{シミュレーションでの最適動作判定}
+	\label{fig:simudousa}
+\end{figure}
 \section{実験結果・考察}
+ここに能率的な動作周波数スイープと非能率の動作周波数スイープの実験結果をのせる．
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.4]{simuhikaku.png}
+	\caption{シミュレーションと実験結果との比較}
+	\label{fig:simu-zitu}
+\end{figure}
+図\ref{fig:simu-zitu}からわかる通り出力結果にずれが生じていることが分かる．これは実験素子の実際の値が表\ref{tab:para}と比べてそれぞれ自己相互インダクタンス，コイルの内部抵抗，送電側受電側のコンデンサのずれが生じているから回路の共振周波数が変わりその結果電力の出力にずれが生じていると考えられる．
+\vspace{\baselineskip}
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.4]{nouritu-hinouritu.png}
+	\caption{シミュレーションでの最適動作判定}
+	\label{fig:nou-hinou}
+\end{figure}
+図\ref{fig:nou-hinou}からわかる通りどちらも最適な周波数の時最適動作度が大きくなっていることから最適動作周波数を見つけることができた．しかし非能率での測り方は先行研究と同じ計測時間である10秒間でかつ加算周波数の値が1ｋのため正確な値が出るが能率化した動作周波数スイープでは10$kHz$ずつ測っているため10kHz間での周波数変化に対応できていない．
+\\　改善点としては最適動作度の大きい範囲(図\ref{fig:nou-hinou}では$15kHzから45kHz$)を小さい加算周波数でまた測定するという方法が考えられるが時間がかかるという点が挙げられる．
 \section{今後の方針}
-
+能率的な周波数スイープを使うことにより，測定時間最短化することができた．それにより時間最短化することにより，ワイヤレス給電の状況によって周波数を変化させることにより受電側どんな状況にあってもいつも高電力を出力するように制御するということができると考えられる．しかし考察にもあるように非能率の周波数スイープと比べて正確性に欠ける．したがって正確かつ最短な能率的周波数スイープする方法を求められる．また，周波数スイープ以外による方法求められる．
+\begin{thebibliography}{50}
+	
+	\bibitem{matuda}松田一志：”ワイヤレス給電システムのための電力測定回路の開発”，宮崎大学学士論文，平成30年度
+	\bibitem{nakamura}中村裕馬：”ワイヤレス給電のための送電側100kHzプッシュプル回路”，宮崎大学学士論文，平成30年度
+	\bibitem{rohm1}ローム株式会社：”ワイヤレス給電とは”ーエレクトロニクス豆知識, https://www.rohm.co.jp/electronics-basics/wireless-charging/wireless-charging\_what1，最終アクセス：2020/1/20
+	\bibitem{rohm2}ローム株式会社:"ワイヤレス給電(無線給電)方式"ーエレクトロニクス豆知識, https://www.rohm.co.jp/electronics-basics/wireless-charging/wireless-charging\_what2
+	\bibitem{goizuka}五位塚潤："低周波数域駆動によるワイヤレス給電回路",　宮崎大学学士論文, 平成29年度
+	\bibitem{hakugin}白銀聡一郎："ワイヤレス給電のための短形波電源装置の設計と開発"，宮崎大学学士論文，平成29年度
+	\bibitem{morita}盛田穣文："ワイヤレス給電システムの効率と電力の最適化について", 宮崎大学修士論文,　平成29年度
+	\bibitem{ito}伊東雅浩："短径波入力による高効率ワイヤレス給電の制御について", 宮崎大学修士論文,　平成30年度
+	\bibitem{syourai}B\&PLUS:"ワイヤレス給電の現状と未来"，https://www.b-plus-kk.jp/about/mechanism.html 最終アクセス：2020/1/23
+	\bibitem{denki}電気の資格とお勉強:"RLC直列共振回路", https://eleking.net/study/s-accircuit/sac-resonant-rlcs.html　最終アクセス：2020/2/01
+\end{thebibliography}
 \end{document}
